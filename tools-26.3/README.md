@@ -16,6 +16,7 @@ Run them with the venv in `resource-packs/Catppuccin UI/.venv` (`catppuccin`,
 | 7 | `assemble.py GEN_ZIP WORK/new JAR OUT_DIR WORK/mods WORK/font WORK/ttf` | folder pack with a transparent pumpkin overlay and `pack.mcmeta` widened to format 97 |
 | 8 | `fix_mcmeta.py JAR OUT_DIR` | copies vanilla `.png.mcmeta` next to every GUI sprite that has none, if the sizes match. Without it the game stretches instead of nine-slicing: 27 sprites lacked it, among them the tabs and the friends screen (2026-11-06) |
 | 9 | `friends_special.py OUT_DIR` | friends screen: its noisy buttons replaced by the pack's `widget/button` sprites, the list interior painted Mantle |
+| 10 | `recolor_mods.py JAR GEN_ZIP WORK/bss WORK/bss-sheet.png MODS/betterstats-*.jar MODS/tcdcommons-*.jar`, then `bss_special.py MODS OUT_DIR WORK/bss` | Better Statistics Screen and TCDCommons: the map's output into the pack, grey icons light again (Crust→Text), toggle buttons cut from the pack's `widget/button` sprites with a Mauve tint when toggled, the selected tab's blue line Mauve, the popup shadow vanilla |
 
 `JAR` is `~/.local/share/PrismLauncher/libraries/com/mojang/minecraft/26.3/minecraft-26.3-client.jar`,
 `MODS` the instance's `mods/`, `OUT_DIR` the instance's
@@ -30,4 +31,4 @@ Settings outside the pack that belong to the look:
 - `config/enhancedoverlay.json`: subtitle, chat input and tab list background
   Base `#1e1e2e` (alpha 220, 200, 200); every other option at its vanilla value
 
-After a Minecraft or mod update, rerun steps 2 to 9 and check the sheets.
+After a Minecraft or mod update, rerun steps 2 to 10 and check the sheets.
