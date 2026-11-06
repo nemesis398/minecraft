@@ -1,7 +1,7 @@
 """Theme Better Statistics Screen and its library TCDCommons (2026-11-06).
 
 Takes the learned-map output of recolor_mods.py for both jars (WORK_DIR) into
-the pack, then repairs what the map gets wrong, the same four ways JEI went:
+the pack, then repairs what the map gets wrong, mostly the way JEI went:
 
 1. Grey icons (close, settings, filters, trash, dropdown arrows, grey folder)
    are light on light vanilla buttons; the map made them dark, so they vanished
@@ -28,6 +28,9 @@ from PIL import Image
 CRUST = (0x11, 0x11, 0x1B)
 TEXT = (0xCD, 0xD6, 0xF4)
 MAUVE = (0xCB, 0xA6, 0xF7)
+BASE = (0x1E, 0x1E, 0x2E)
+MANTLE = (0x18, 0x18, 0x25)
+SURFACE1 = (0x45, 0x47, 0x5A)
 VANILLA_BLUE = (74, 136, 199)
 
 BSS = "assets/betterstats/textures/gui/sprites/"
@@ -114,6 +117,38 @@ def main(mods, pack, work):
     put(name, img)
 
     put(TCDC + "popup/shadow.png", original(TCDC + "popup/shadow.png"))
+
+    # 5. The editor's panels are 1x1 translucent black (alpha 80, 40 or 0), so
+    #    the blurred world showed through and the stat rows, which the mod
+    #    fills in code with translucent white, read as light grey bars (Mika's
+    #    screenshots, 2026-11-06). Opaque Catppuccin instead; the rows then sit
+    #    on Base. The search field (black), the group header (yellow) and the
+    #    rows are drawn in code and stay as the mod draws them.
+    for rel, color in (("editor/menubar/background.png", MANTLE),
+                       ("editor/tab_strip/background.png", CRUST),
+                       ("editor/tab/background.png", BASE),
+                       ("editor/tab/stats_file/filters_background.png", MANTLE),
+                       ("editor/tab/stats_file/stats_background.png", None)):
+        put(BSS + rel, Image.new("RGBA", (1, 1), (color + (255,)) if color else (0, 0, 0, 0)))
+    for rel in ("editor/menubar/foreground.png", "editor/tab/foreground.png"):
+        img = original(BSS + rel)
+        px = img.load()
+        for y in range(img.height):
+            for x in range(img.width):
+                if px[x, y][3]:
+                    px[x, y] = CRUST + (px[x, y][3],)
+        put(BSS + rel, img)
+
+    # 6. Dropdown and context menus: neutral grey in vanilla and after the map.
+    for suffix, edge in (("", SURFACE1), ("_highlighted", MAUVE)):
+        img = original(TCDC + f"popup/ctxmenu{suffix}.png")
+        px = img.load()
+        for y in range(img.height):
+            for x in range(img.width):
+                r, g, b, a = px[x, y]
+                if a:
+                    px[x, y] = (MANTLE if r < 60 else edge) + (a,)
+        put(TCDC + f"popup/ctxmenu{suffix}.png", img)
 
 
 if __name__ == "__main__":
