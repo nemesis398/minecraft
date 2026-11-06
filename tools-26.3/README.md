@@ -14,6 +14,8 @@ Run them with the venv in `resource-packs/Catppuccin UI/.venv` (`catppuccin`,
 | 5 | `font_tint.py JAR WORK/font` | bitmap font sheets multiplied by Text `#cdd6f4` (only shows where the TTF lacks a glyph) |
 | 6 | `ttf_font.py ~/.local/share/fonts/JetBrainsMonoNerd/JetBrainsMonoNerdFont-Regular.ttf WORK/ttf 8` | JetBrains Mono Nerd Font as the game font, size 8, vanilla fonts as fallback |
 | 7 | `assemble.py GEN_ZIP WORK/new JAR OUT_DIR WORK/mods WORK/font WORK/ttf` | folder pack with a transparent pumpkin overlay and `pack.mcmeta` widened to format 97 |
+| 8 | `fix_mcmeta.py JAR OUT_DIR` | copies vanilla `.png.mcmeta` next to every GUI sprite that has none, if the sizes match. Without it the game stretches instead of nine-slicing: 27 sprites lacked it, among them the tabs and the friends screen (2026-11-06) |
+| 9 | `friends_special.py OUT_DIR` | friends screen: its noisy buttons replaced by the pack's `widget/button` sprites, the list interior painted Mantle |
 
 `JAR` is `~/.local/share/PrismLauncher/libraries/com/mojang/minecraft/26.3/minecraft-26.3-client.jar`,
 `MODS` the instance's `mods/`, `OUT_DIR` the instance's
@@ -28,4 +30,4 @@ Settings outside the pack that belong to the look:
 - `config/enhancedoverlay.json`: subtitle, chat input and tab list background
   Base `#1e1e2e` (alpha 220, 200, 200); every other option at its vanilla value
 
-After a Minecraft or mod update, rerun steps 2 to 7 and check the sheets.
+After a Minecraft or mod update, rerun steps 2 to 9 and check the sheets.
