@@ -1,0 +1,31 @@
+# Catppuccin Mocha Mauve for Minecraft 26.3 (local build)
+
+Upstream `create_flavors.py` stops at 1.21.6. These scripts extend its Mocha
+Mauve output to 26.3 for Mika's Prism instance `Minecraft 26.3` (2026-11-06).
+Run them with the venv in `resource-packs/Catppuccin UI/.venv` (`catppuccin`,
+`pillow`) and `PYTHONDONTWRITEBYTECODE=1`.
+
+| Step | Script | What it does |
+|---|---|---|
+| 1 | `create_flavors.py -f mocha -a mauve`, template `1.20.2` | upstream Mocha Mauve zip in `output/1.20.2/` |
+| 2 | `recolor.py JAR GEN_ZIP WORK/new WORK/sheet.png` | learns the vanilla → Catppuccin color map from the 418 textures upstream covers, recolors the 75 GUI textures 26.3 adds; skips signs, Realms, title art, advancement backgrounds, presets, locator dots and item-like pictures |
+| 3 | `recolor_mods.py JAR GEN_ZIP WORK/mods WORK/mods-sheet.png MODS/jei-*.jar MODS/Jade-*.jar MODS/xaerominimap-*.jar` | the same map over JEI, Jade and Xaero GUI sprites |
+| 4 | `mods_special.py MODS PACK_DIR WORK/mods` | what the map cannot do: Xaero's tinted white/black textures painted Crust→Mauve, Jade's dark tooltip = the pack's vanilla tooltip, JEI buttons = the pack's vanilla buttons, JEI icons inverted onto Crust→Text, JEI panel border thinned to one Mauve pixel. `PACK_DIR` must already hold an assembled pack (run step 7 once first) |
+| 5 | `font_tint.py JAR WORK/font` | bitmap font sheets multiplied by Text `#cdd6f4` (only shows where the TTF lacks a glyph) |
+| 6 | `ttf_font.py ~/.local/share/fonts/JetBrainsMonoNerd/JetBrainsMonoNerdFont-Regular.ttf WORK/ttf 8` | JetBrains Mono Nerd Font as the game font, size 8, vanilla fonts as fallback |
+| 7 | `assemble.py GEN_ZIP WORK/new JAR OUT_DIR WORK/mods WORK/font WORK/ttf` | folder pack with a transparent pumpkin overlay and `pack.mcmeta` widened to format 97 |
+
+`JAR` is `~/.local/share/PrismLauncher/libraries/com/mojang/minecraft/26.3/minecraft-26.3-client.jar`,
+`MODS` the instance's `mods/`, `OUT_DIR` the instance's
+`resourcepacks/Catppuccin Mocha Mauve 26.3`. A folder pack reloads in game with
+F3+T.
+
+Settings outside the pack that belong to the look:
+
+- `config/jei/client/default/jei-client.ini`: `drawBackground = BACKGROUND`
+- `config/jade/jade.json`: overlay `alpha` 0.9, mod name color `#CBA6F7`
+- `config/xaero/minimap/profiles/default.cfg`: `minimap_frame_color = 15` (white, so no tint)
+- `config/enhancedoverlay.json`: subtitle, chat input and tab list background
+  Base `#1e1e2e` (alpha 220, 200, 200); every other option at its vanilla value
+
+After a Minecraft or mod update, rerun steps 2 to 7 and check the sheets.
