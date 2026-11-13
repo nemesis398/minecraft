@@ -4,3 +4,5 @@
 **/Catppuccin UI/temp
 # Python cache
 __pycache__/
+# Virtual environments
+.venv/
